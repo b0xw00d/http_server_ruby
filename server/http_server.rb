@@ -3,9 +3,9 @@ require 'date'
 require_relative 'server_setup'
 
 class ChaseyServer
-  PATH_ROOT = "./views"
-  WELCOME = File.expand_path PATH_ROOT + "/welcome.html.erb"
-  PROFILE = File.expand_path PATH_ROOT + "/profile.html.erb"
+  VIEW_ROOT = "./views"
+  WELCOME = File.expand_path VIEW_ROOT + "/welcome.html.erb"
+  PROFILE = File.expand_path VIEW_ROOT + "/profile.html.erb"
 
   attr_reader :server, :welcome, :profile
   def initialize
