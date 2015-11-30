@@ -1,5 +1,6 @@
 require 'socket'
 require 'date'
+require 'erb'
 require_relative 'server_setup'
 require_relative 'uri_parser'
 
@@ -14,10 +15,13 @@ class ChaseyServer
     loop do
       socket = server.accept
       request = socket.gets.chomp
-      path = UriParser.parse_request(request)
+      path = UriParser.parse_request_path(request)
+      params = UriParser.parse_params(request)
+      @first = params.fetch("first", ["good"])[0]
+      @last = params.fetch("last", ["friend"])[0]
 
       if File.exist?(path) && !File.directory?(path)
-        response = File.open(path).read
+        response = ERB.new(File.open(path).read, 0, '>')
         status_code = 200
       else
         response = <<-RESPONSE_STRING
@@ -26,7 +30,7 @@ class ChaseyServer
         status_code = 404
       end
 
-      socket.puts ServerSetup.response_headers(status_code, response)
+      socket.puts ServerSetup.response_headers(status_code, response.result(binding))
       socket.close
     end
   end
