@@ -10,7 +10,7 @@ Clone this repository then navigate to that directory in your terminal:
 
 Run the server:
 ```bash
-  $ rake server
+  $ rake chasey_server
 ```
 
 Visit in your browser at localhost:2000, or view page contents from the command line with:
