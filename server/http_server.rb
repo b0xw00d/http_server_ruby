@@ -21,7 +21,7 @@ class ChaseyServer
         status_code = 200
       else
         response = <<-RESPONSE_STRING
-          <h1><span style='color:red'>Error!</span> 404: page not found</h1>"
+          <h1><span style='color:red'>Error!</span> 404: page not found</h1>
         RESPONSE_STRING
         status_code = 404
       end

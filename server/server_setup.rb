@@ -13,7 +13,7 @@ module ServerSetup
      "Server: Ruby/2.2.2 (Unix) (El-Capitan/OSX)",
      "Content-Type: text/html; charset=UTF-8",
      "Content-Length: #{response.length}",
-     "Conection: close",
+     "Connection: close",
      "",
      response]
   end
