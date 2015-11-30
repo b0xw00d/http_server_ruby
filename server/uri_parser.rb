@@ -7,7 +7,12 @@ module UriParser
 
   def parse_request(request)
     request_uri = request.split(" ")[1]
-    path = URI.unescape(URI(request_uri).path) + ".html.erb"
+
+    if request_uri != "/"
+      path = URI.unescape(URI(request_uri).path) + ".html.erb"
+    else
+      path = "/welcome.html.erb"
+    end
 
     File.join(VIEW_ROOT, path)
   end

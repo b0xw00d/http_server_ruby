@@ -5,7 +5,7 @@ require_relative 'uri_parser'
 
 class ChaseyServer
 
-  attr_reader :server, :welcome, :profile
+  attr_reader :server
   def initialize
     @server = TCPServer.new("localhost", 2000)
   end
@@ -20,9 +20,9 @@ class ChaseyServer
         response = File.open(path).read
         status_code = 200
       else
-        response = <<-RESPONSE
+        response = <<-RESPONSE_STRING
           <h1><span style='color:red'>Error!</span> 404: page not found</h1>"
-        RESPONSE
+        RESPONSE_STRING
         status_code = 404
       end
 
