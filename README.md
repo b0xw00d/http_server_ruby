@@ -13,12 +13,12 @@ Run the server:
   $ rake server
 ```
 
-Visit in browser or view page contents from the command line with:
+Visit in your browser at localhost:2000, or view page contents from the command line with:
 ```bash
   $ curl -v http://localhost:2000/
 ```
 
-To add your own views save an html.erb file in the views directory of this repo then visit it with the curl command:
+To add your own views save an html.erb file in the 'views' directory of this repo, then visit it with the curl command:
 ```bash
   $ curl -v http://localhost:2000/name_of_your_view
 ```
