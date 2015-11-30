@@ -1,12 +1,15 @@
+require "uri"
 
-# module UriParser
-#   extend self
+module UriParser
+  extend self
 
-#   def parse_request(request)
-#     request_uri  = request.split(" ")[1]
-#     path = URI.unescape(URI(request_uri).path)
+  VIEW_ROOT = File.expand_path "./views"
 
-#     File.join(PATH_ROOT, path)
-#   end
+  def parse_request(request)
+    request_uri = request.split(" ")[1]
+    path = URI.unescape(URI(request_uri).path) + ".html.erb"
 
-# end
+    File.join(VIEW_ROOT, path)
+  end
+
+end

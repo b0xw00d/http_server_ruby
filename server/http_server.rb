@@ -1,30 +1,23 @@
 require 'socket'
 require 'date'
 require_relative 'server_setup'
+require_relative 'uri_parser'
 
 class ChaseyServer
-  VIEW_ROOT = "./views"
-  WELCOME = File.expand_path VIEW_ROOT + "/welcome.html.erb"
-  PROFILE = File.expand_path VIEW_ROOT + "/profile.html.erb"
 
   attr_reader :server, :welcome, :profile
   def initialize
     @server = TCPServer.new("localhost", 2000)
-    @welcome = File.open(WELCOME).read
-    @profile = File.open(PROFILE).read
   end
 
-  def runner
+  def run
     loop do
       socket = server.accept
       request = socket.gets.chomp
+      path = UriParser.parse_request(request)
 
-      case request
-      when "GET /welcome HTTP/1.1"
-        response = welcome
-        status_code = 200
-      when "GET /profile HTTP/1.1"
-        response = profile
+      if File.exist?(path) && !File.directory?(path)
+        response = File.open(path).read
         status_code = 200
       else
         response = <<-RESPONSE
@@ -41,4 +34,4 @@ class ChaseyServer
 end
 
 chasey_server = ChaseyServer.new
-chasey_server.runner
+chasey_server.run
