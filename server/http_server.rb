@@ -7,8 +7,8 @@ require_relative 'uri_parser'
 class ChaseyServer
 
   attr_reader :server
-  def initialize
-    @server = TCPServer.new("localhost", 2000)
+  def initialize(port)
+    @server = TCPServer.new("localhost", port)
   end
 
   def run
@@ -35,7 +35,11 @@ class ChaseyServer
     end
   end
 
+  def close
+    server.close
+  end
+
 end
 
-chasey_server = ChaseyServer.new
+chasey_server = ChaseyServer.new(2000)
 chasey_server.run
