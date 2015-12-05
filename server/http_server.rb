@@ -6,8 +6,6 @@ require_relative 'uri_parser'
 
 class ChaseyServer
 
-  NOT_FOUND = "<h1><span style='color:red'>Error!</span> 404: not found</h1>"
-
   attr_reader :server
   def initialize(port)
     @server = TCPServer.new("localhost", port)
@@ -25,7 +23,7 @@ class ChaseyServer
     if File.exist?(path) && !File.directory?(path)
       ERB.new(File.open(path).read, 0, '>')
     else
-      NOT_FOUND
+      "<h1><span style='color:red'>Error!</span> 404: not found</h1>"
     end
   end
 
@@ -50,6 +48,7 @@ class ChaseyServer
     loop do
       socket = server.accept
       request = socket.gets.chomp
+
       path = set_path(request)
       params = set_params(request)
 
