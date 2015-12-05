@@ -25,12 +25,20 @@ class ChaseyServer
     response.is_a?(ERB) ? 200 : 404
   end
 
+  def set_path(request)
+    UriParser.parse_request_path(request)
+  end
+
+  def set_params(request)
+    UriParser.parse_params(request)
+  end
+
   def run
     loop do
       socket = server.accept
       request = socket.gets.chomp
-      path = UriParser.parse_request_path(request)
-      params = UriParser.parse_params(request)
+      path = set_path(request)
+      params = set_params(request)
       @first = params.fetch("first", ["good"])[0]
       @last = params.fetch("last", ["friend"])[0]
 
@@ -40,10 +48,6 @@ class ChaseyServer
       socket.puts ServerSetup.response_headers(status_code, response.result(binding))
       socket.close
     end
-  end
-
-  def close
-    server.close
   end
 
 end
