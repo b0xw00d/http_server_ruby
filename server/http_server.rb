@@ -6,23 +6,11 @@ require_relative 'uri_parser'
 
 class ChaseyServer
 
-  ERROR_RESPONSE = "<h1><span style='color:red'>Error!</span> 404: page not found</h1>"
+  NOT_FOUND = "<h1><span style='color:red'>Error!</span> 404: not found</h1>"
 
   attr_reader :server
   def initialize(port)
     @server = TCPServer.new("localhost", port)
-  end
-
-  def build_response(path)
-    if File.exist?(path) && !File.directory?(path)
-      ERB.new(File.open(path).read, 0, '>')
-    else
-      ERROR_RESPONSE
-    end
-  end
-
-  def set_status(response)
-    response.is_a?(ERB) ? 200 : 404
   end
 
   def set_path(request)
@@ -33,14 +21,31 @@ class ChaseyServer
     UriParser.parse_params(request)
   end
 
+  def build_response(path)
+    if File.exist?(path) && !File.directory?(path)
+      ERB.new(File.open(path).read, 0, '>')
+    else
+      NOT_FOUND
+    end
+  end
+
+  def set_status(response)
+    response.is_a?(ERB) ? 200 : 404
+  end
+
+  def control_variables(params)
+    @first = params.fetch("first", ["good"])[0]
+    @last = params.fetch("last", ["friend"])[0]
+  end
+
   def run
     loop do
       socket = server.accept
       request = socket.gets.chomp
       path = set_path(request)
       params = set_params(request)
-      @first = params.fetch("first", ["good"])[0]
-      @last = params.fetch("last", ["friend"])[0]
+
+      control_variables(params)
 
       response = build_response(path)
       status_code = set_status(response)
