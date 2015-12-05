@@ -33,6 +33,14 @@ class ChaseyServer
     response.is_a?(ERB) ? 200 : 404
   end
 
+  def send_response(status, response)
+    if status == 200
+      ServerSetup.response_headers(status, response.result(binding))
+    else
+      ServerSetup.response_headers(status, response)
+    end
+  end
+
   def control_variables(params)
     @first = params.fetch("first", ["good"])[0]
     @last = params.fetch("last", ["friend"])[0]
@@ -48,9 +56,9 @@ class ChaseyServer
       control_variables(params)
 
       response = build_response(path)
-      status_code = set_status(response)
+      status = set_status(response)
 
-      socket.puts ServerSetup.response_headers(status_code, response.result(binding))
+      socket.puts send_response(status, response)
       socket.close
     end
   end
